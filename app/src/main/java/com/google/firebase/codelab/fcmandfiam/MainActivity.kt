@@ -31,7 +31,22 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener {
-            // TODO: Log tokens for testing FCM and FIAM
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { regTokenTask ->
+                if (regTokenTask.isSuccessful) {
+                    Log.d(TAG, "FCM registration token: ${regTokenTask.result}")
+                } else {
+                    Log.e(TAG, "Unable to retrieve registration token",
+                        regTokenTask.exception)
+                }
+            }
+            FirebaseInstallations.getInstance().id.addOnCompleteListener { installationIdTask ->
+                if (installationIdTask.isSuccessful) {
+                    Log.d(TAG, "Firebase Installations ID: ${installationIdTask.result}")
+                } else {
+                    Log.e(TAG, "Unable to retrieve installations ID",
+                        installationIdTask.exception)
+                }
+            }
         }
     }
 }
